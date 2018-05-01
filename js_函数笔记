@@ -1,0 +1,46 @@
+1.1 函数定义
+      js中，函数就是对象，对象是“名/值”对的集合并拥有一个连接到原型对象的隐藏连接，
+      对象字面上产生连接到Object.prototype.函数本身连接到Function.type.
+1.2 函数字面量： 
+      包括四个部分：
+         (1) 保留字function
+        （2） 函数名
+        （3） 包围在圆括号中的一组参数，参数用逗号隔开
+        （4） 包围在花括号中的一组语句
+1.3 调用
+      调用一个函数将暂停当前函数的执行，传递控制权和参数给新函数。除了声明时定义的形参，
+      每个函数接收两个附加参数：this 和argument。
+      四种调用方式：
+      （1）方法调用模式
+          当一个函数被保存为对象的一个属性时，我们称它为一个方法。一个方法被调用时，this被绑定到该对象。
+          var myObj={
+            value:0;
+            increment:function(inc){
+              this.value+=typeof inc === 'number' ? inc :1;    //如果参数不是数字，默认是数字1.
+            }
+          };
+           myObj.increment();
+           document.writeln(myObj.value);   //1
+           
+           myObj.increment(2);
+           document.writeln(myObj.value);   //3
+        公共方法：通过this可取得所属对象的上下文的方法；
+      （2）函数调用
+          当一个函数不是一个对象的属性时，那么它被当做一个函数来调用。
+          用var that=this，这个方法可以解决this被绑定错误值。
+            myObj.double=function(){
+              var that=this;
+              var helper=function(){
+                that.value=add(that.value,that.value)
+                };
+                helper();  //以函数的形式调用helper
+            };
+          //以函数的形式调用double
+            myObj.double();
+            document.writeln(myObj.getValue);    //6
+            
+        （3）构造器调用模式
+          js 基于原型继承的语言 ，可以继承属性。
+           在一个函数前面加上 new 来调用，
+           将创建一个隐藏连接到该函数的prototype的新对象，this也会被绑定到这个新对象，
+           new 前缀也会改变return语句的行为。
