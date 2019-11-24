@@ -8,7 +8,8 @@
 > - 支持“新增页”中使用和“编辑页”中使用
 
 #### 功能实现 （几种思路，各有优劣）
-1. 全选项包含在el-select的v-model值之中 
+1. 思路1:   
+全选项包含在el-select的v-model值之中 
 tips: 需要后端配合处理全选项（新增页面中的el-select提交值后，需要后端对'all'， 处理；在编辑页中，需要后端将'all'返回（若包含全选））   
 思路： 借用旧值（oldValue），将change事件中的value值（新值）和 oldValue 做上述功能if判断；在初始化时，将初始值赋值给旧值；每次change方法执行最后，修改旧值
 
@@ -96,4 +97,69 @@ methods: {
     },
 
 </script>
+```   
+
+2. 思路2:   
+用一个option做“全选”与取消全选的功能，在change事件中，将''从el-select数组中删除；computed中判断el-select数组的长度是否等于options列表的长度，true -> “取消全选”； false -> “全选”
+
+```
+    <div style="margin-top: 100px;overflow:hidden;">
+      <el-select
+      v-model="selectVal"
+      multiple
+      collapse-tags
+      @change="changeSelect1"
+      placeholder="请选择类型查询"
+    >
+    <!-- 该option不用于添加数据，仅用于“全选”或“取消全选”， 添加样式，以作区分-->
+    <el-option :label="allText" value="" class="all" style="
+    background: teal;"></el-option>
+      <el-option 
+        v-for="(type,index) in typeList1" 
+        :key="index" 
+        :label="type.label" 
+        :value="type.value"></el-option>
+    </el-select>
+
+    ...
+    // data: 
+      data() {
+        return {
+          typeList1: [
+              { value: "01", label: "item1" },
+              { value: "02", label: "item2" },
+              { value: "03", label: "item3" },
+            ],
+            selectVal: [],
+        }
+      },
+    // computed
+    computed: {
+      allText() {
+        return this.selectVal.length === this.typeList1.length ? '取消全部' : '选择全部'
+      }
+  },
+  methods: {
+    changeSelect1(val) {
+      if(val.length && val.indexOf('') > -1) {
+        // 不将“全部”添加到el-selct数组中
+        val.forEach((item, index, self) => {
+          if(item === '') {
+            self.splice(index, 1)
+          }
+        })
+        if(val.length === this.typeList1.length) {
+          // 取消全选
+          this.selectVal = []
+        }else {
+          // 全选， 保持el-select中的选中顺序，将为添加的option添加el-select数组中
+          this.typeList1.forEach(item => {
+            if(val.indexOf(item.value) === -1) {
+              val.push(item.value)
+            }
+          })
+        }
+      }
+    },
+  }
 ```
