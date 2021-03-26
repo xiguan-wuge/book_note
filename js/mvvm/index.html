@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=`, initial-scale=1.0">
+  <title>MVVM</title>
+  <script src="./index.js"></script>
+</head>
+<body>
+  <h1 id="name">this is h1</h1>
+  <h2 id="name2">this is h2</h2>
+  <input type="text" name="" id="">
+  <input type="button" value="改变data内容" onclick="changeInput()">
+
+  <script>
+    function myVue(data, el, exp) {
+      // console.log('myVue-el',el)
+      this.data = data
+      observable(data) // 将数据变为可观测
+      el.innerHTML = this.data[exp] // 初始化模版数据的值
+      // 监听数据更新
+      new Watcher(this,exp,function(value) {
+      //   console.log('run cb')
+      //   console.log('run el',el)
+        console.log('run-value',value)
+        el.innerHTML = value
+      })
+      return this
+    }
+
+    var element = document.querySelector('#name')
+    var inputElement = document.querySelector('input')
+
+    var myvue = new myVue(
+      {
+        name: '张三',
+        age: 22
+      },
+      element,
+      'name'
+    )
+
+    // 改变输入框内容
+    inputElement.oninput = function(e) {
+      console.log('input change')
+      myvue.data.name = e.target.value
+    }
+
+    function changeInput() {
+      myvue.data.name = 'changed value'
+    }
+    
+  </script>
+  
+</body>
+</html>
