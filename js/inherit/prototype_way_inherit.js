@@ -15,20 +15,21 @@ function object (o) {
   return new F()
 }
 
-// var anotherPerson = object(person)
-// console.log('anotherPerson',anotherPerson); // {}
-// console.log('anotherPerson.prototype', anotherPerson.prototype);// undefind
+var anotherPerson = object(person)
+console.log('anotherPerson',anotherPerson); // {}
+console.log('anotherPerson.prototype', anotherPerson.prototype);// undefind,
+// 实例无prototype属性，实例通过__proto__属性指向其原型
 
-// anotherPerson.name = 'dashan'
-// anotherPerson.frends.push('xiaoming')
+anotherPerson.name = 'dashan'
+anotherPerson.frends.push('xiaoming') // 修改了__proto__中的friends
 
-// var yetAnotherPerson = object(person)
-// yetAnotherPerson.name = 'xiaohong'
-// yetAnotherPerson.frends.push('xiaolan')
+var yetAnotherPerson = object(person)
+yetAnotherPerson.name = 'xiaohong'
+yetAnotherPerson.frends.push('xiaolan')
 
-// console.log('anotherPerson', anotherPerson); //{ name: 'dashan' }
-// console.log('yetAnotherPerson', yetAnotherPerson); { name: 'xiaohong' }
-// console.log('person', person);
+console.log('anotherPerson', anotherPerson); //{ name: 'dashan' }
+console.log('yetAnotherPerson', yetAnotherPerson); { name: 'xiaohong' }
+console.log('person', person);
 // {
 //  name: 'zhangsan',
 //  frends: [ 'lisi', 'wanger', 'xiaoming', 'xiaolan' ]
@@ -42,7 +43,7 @@ function object (o) {
 
 
 
-// js继承-寄生式继承
+// js继承-寄生式继承（parasitic）
 // 思路： 创建一个仅用于封装继承过程的函数，该函数在内部以某种方式来增强对象，最后返回对象
 function createAnother(original) {
   var clone = object(original)
@@ -59,3 +60,7 @@ var animal = {
 var anotherAnimal = createAnother(person)
 console.log('anotherAnimal', anotherAnimal); // { sayHi: [Function] }
 anotherAnimal.sayHi() // hi
+
+// 寄生式继承的作用于： 考虑对象而不是自定义类型和构造函数的情况下
+// 问题： 不能做到函数复用，与借助构造函数模式类似
+// sayHi函数无法复用
