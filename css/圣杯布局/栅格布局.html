@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+ 
+<head>
+  <meta charset="utf-8">
+  <script src="http://lib.sinaapp.com/js/jquery/2.0.2/jquery-2.0.2.min.js"></script>
+</head>
+<style>
+  body {
+    min-width: 550px;
+    font-weight: bold;
+    font-size: 20px;
+    display: grid;
+  }
+  #header,
+  #footer {
+    background: rgba(29, 27, 27, 0.726);
+    text-align: center;
+    height: 60px;
+    line-height: 60px;
+  }
+  #header {
+    grid-row: 1;
+    grid-column: 1/5;
+  }
+  #footer {
+    grid-row: 3;
+    grid-column: 1/5;
+  }
+  .column {
+    text-align: center;
+    height: 300px;
+    line-height: 300px;
+  }
+  #left {
+    grid-row: 2;
+    grid-column: 1/2;
+    background: rgba(95, 179, 235, 0.972);
+  }
+  #center {
+    grid-row: 2;
+    grid-column: 2/4;
+    background: rgb(206, 201, 201);
+  }
+  #right {
+    grid-row: 2;
+    grid-column: 4/5;
+    background: rgb(231, 105, 2);
+  }
+</style>
+ 
+<body>
+  <script></script>
+  <div id="header">#header</div>
+  <div id="left" class="column">#left</div>
+  <div id="center" class="column">#center</div>
+  <div id="right" class="column">#right</div>
+  <div id="footer">#footer</div>
+  <hr>
+  <img src="./栅格布局.jpeg" alt="">
+  <div>
+    <!-- 如上图所示，我们把body划分成三行四列的网格，其中有5条列网格线
+    给body元素添加display: grid;属性变成一个grid(网格)
+    给header元素设置grid-row: 1; 和 grid-column: 1/5; 意思是占据第一行网格的从第一条列网格线开始到第五条列网格线结束
+    给footer元素设置grid-row: 1; 和 grid-column: 1/5; 意思是占据第三行网格的从第一条列网格线开始到第五条列网格线结束
+    给left元素设置grid-row: 2; 和 grid-column: 1/2; 意思是占据第二行网格的从第一条列网格线开始到第二条列网格线结束
+    给center元素设置grid-row: 2; 和 grid-column: 2/4; 意思是占据第二行网格的从第二条列网格线开始到第四条列网格线结束
+    给right元素设置grid-row: 2; 和 grid-column: 4/5; 意思是占据第二行网格的从第四条列网格线开始到第五条列网格线结束 -->
+  </div>
+</body>
+ 
+</html>
