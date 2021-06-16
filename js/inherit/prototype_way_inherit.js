@@ -39,7 +39,7 @@ console.log('person', person);
 // // person1.name = 'dashan'
 // // person1.frends.push('xiaoming')
 // console.log(person); //  name: 'zhangsan', frends: [ 'lisi', 'wanger' ] }
-// console.log(person1); // {} ????????? 
+// console.log(person1); // {} ????????? 当前实例对象是自有属性是空，但是他有_prototype 属性，指向其原型对象
 
 
 

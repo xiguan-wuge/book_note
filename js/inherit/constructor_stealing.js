@@ -9,12 +9,12 @@
 function SuperType(name) {
   this.name = name
 }
-function SubType() {
-  SuperType.call(this, 'zhangsan')
+function SubType(name) {
+  SuperType.call(this, name)
   this.age = 18
 }
 
-var instance = new SubType()
+var instance = new SubType('zhangsan')
 console.log(instance.name); // zhangsan
 console.log(instance.age); // 18
 

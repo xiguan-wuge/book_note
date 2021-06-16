@@ -36,11 +36,15 @@ var tempColor = new SubType('xiaohua', 20)
 console.log('tempColor', tempColor);
 // tempColor.sayName() // 浏览器上可执行
 tempColor.sayAge()
+console.log('tempColor.__proto__', tempColor.__proto__)
+tempColor.__proto__.sayColor = false
 
 var tempAnotherColor = new SubType('xiaohong', 22)
 console.log('tempAnotherColor',tempAnotherColor);
 // tempAnotherColor.sayName()
 tempAnotherColor.sayAge()
+console.log('tempAnotherColor.__proto__', tempAnotherColor.__proto__)
+
 
 // 总结：
 // 寄生组合式继承的含义： 借助构造函数来继承属性（实例属性），通过原型链的混成形式来继承方法

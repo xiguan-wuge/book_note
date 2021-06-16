@@ -54,7 +54,7 @@ class MyPromise {
     // 依次执行成功队列中的函数，并清空队列
     const runFulfilled = (value) => {
       let cb;
-      console.log('this._fulfilledQueue',this._fulfilledQueue);
+      // console.log('this._fulfilledQueue', this._fulfilledQueue);
       
       while (cb = this._fulfilledQueue.shift()) {
         cb(value)
@@ -79,7 +79,7 @@ class MyPromise {
         runRejected(err)
       })
     } else {
-      console.log('normal');
+      // console.log('normal');
       
       this._value = val
       runFulfilled(val)
@@ -165,7 +165,7 @@ class MyPromise {
   }
   // 添加静态resolve方法
   static resolve(value) {
-    console.log('static resolve');
+    // console.log('static resolve');
     // 如果参数是MyPromise实例或thenable对象，直接返回value
     return value instanceof MyPromise ||
       (value && isFunction(value.then)) ? value :
@@ -200,6 +200,7 @@ class MyPromise {
       }
     })
   }
+
   finally(cb) {
     return this.then(
       value  => MyPromise.resolve(cb()).then(() => value),
@@ -209,18 +210,38 @@ class MyPromise {
 }
 
 // 测试代码
-new MyPromise(resolve => {
-  console.log(1);
-  resolve(3);
-  MyPromise.resolve().then(
-    () => console.log(4)
-  ).then(
-    () => console.log(5)
-  )
-}).then(num => { 
-  console.log(num) 
-}).then(() => { 
-  console.log(6) 
-});
+// new MyPromise(resolve => {
+//   console.log(1);
+//   resolve(3);
+//   MyPromise.resolve().then(
+//     () => console.log(4)
+//   ).then(
+//     () => console.log(5)
+//   )
+// }).then(num => { 
+//   console.log(num) 
+// }).then(() => { 
+//   console.log(6) 
+// }).finally(() => {
+//   console.log('finally')
+// })
+// console.log(2)
+// 依次输出：1 2 4 3 5 6 finally
+
+new Promise(resolve => {
+  console.log(1)
+  resolve(3)
+  Promise.resolve().then(() => {
+    console.log(4)
+  }).then(() => {
+    console.log(5)
+  })
+}).then(num => {
+  console.log(num)
+}).then(() => {
+  console.log(6)
+}).finally(() => {
+  console.log('finally')
+})
 console.log(2)
-// 依次输出：1 2 4 3 5 6
+// 依次输出：1 2 4 3 5 6 finally

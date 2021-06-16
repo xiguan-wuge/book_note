@@ -42,5 +42,6 @@ function myNew() {
   let Con = [].shift.call(arguments) // 类数组转化为数组
   obj.__proto__ = Con.prototype
   let result = Con.apply(obj, arguments) // 绑定this
+  // 判断构造函数的返回值，若是返回一个对象，则结果是该对象，否则返回空对象
   return result instanceof Object ? result : obj
 }
