@@ -1,4 +1,5 @@
 import {createElement, createTextNode} from './vdom/index'
+import {nextTick} from './util/next-tick'
 
 export function renderMixins(Vue) {
   // render 函数转化成虚拟 dom 核心方法 _render
@@ -29,4 +30,7 @@ export function renderMixins(Vue) {
       ? JSON.stringify(val)
       : val;
   }
+
+  // 挂载原型上的nextTick方法，可供用户手动调用
+  Vue.prototye.$nextTick = nextTick
 }

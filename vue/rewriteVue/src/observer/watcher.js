@@ -1,4 +1,5 @@
 import {pushTarget, popTarget} from './dep'
+import {queueWatcher} from './scheduler'
 // 全局变量id, 每次new Watcher 都会自增
 let id = 0
 
@@ -29,7 +30,7 @@ export default class Watcher {
     this.getter()
 
     // 在调用方法之后，把当前watcher实例从全局Dep.targtet中移除
-    popTargtet()
+    popTarget()
   }
 
   // 把dep实例添加到deps中， 
@@ -47,6 +48,14 @@ export default class Watcher {
 
   // 简单执行下get方法，模拟派发更新，之后涉及到计算属性就不一样了
   update() {
+    // this.get()
+    // 每次watcher进行更新时，先缓存起来，之后再一起调用
+    // 异步队列机制
+    queueWatcher(this)
+  }
+
+  run() {
+    // 真正的触发更新
     this.get()
   }
 }

@@ -26,10 +26,17 @@
       template: '<div id="aaa">hello {{name}}</div>'
     })
 
+    // setTimeout(() => {
+    //   vm.a = '456'
+    //   // 调用更新
+    //   vm._update(vm._render())
+    // })
+
     setTimeout(() => {
-      vm.a = '456'
-      // 调用更新
-      vm._update(vm._render())
+      vm.name = '4444'
+      vm.name = '555'
+      vm.name = '66'
+      // 当我们每次修改数据时，渲染watcher都会去执行一次，这个是影响性能的
     })
   </script>
 </body>
