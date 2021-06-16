@@ -1,6 +1,5 @@
 import {parse} from './parse'
 import {generate} from './codegen'
-import _class from '../../../../../vue/vue@2x/vueSourceCode/vue/src/platforms/web/compiler/modules/class'
 
 export function compileToFunction(template) {
   // 需要把html字符串转换成render函数

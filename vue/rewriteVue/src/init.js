@@ -1,5 +1,6 @@
 import {initState} from 'state'
 import {compileToFunction} from './compiler/index'
+import {mountComponent} from './lifecycle'
 export function initMixins(Vue) {
   Vue.prototype._init = function(options) {
     // 这里的this代表调用_init方法的对象（Vue实例）
@@ -37,5 +38,8 @@ export function initMixins(Vue) {
         options.render = render
       }
     }
+
+    // 将当前组件实例挂载到真实的el节点上面
+    return mountComponent(vm, el)
   }
 }
