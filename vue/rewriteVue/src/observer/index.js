@@ -1,4 +1,5 @@
 import {arrayMethod} from './array'
+import Dep from './dep'
 
 class Observer {
   constructor(value) {
@@ -44,17 +45,42 @@ class Observer {
 function defineReactive(data, key, value) { 
   // 若velue 是对象，则递归
   // 思考：如果数据嵌套层级过深，则性能会受到一定的影响
-  observe(value)
+
+  // 递归观测子数据，同时为数组方法做铺垫
+  let childObj = observe(value) // childObj 就是Observer实例
+  
+  // 为每个属性实例化一个dep
+  let dep = new Dep()
 
   Object.defineProperty(data, key, {
     get() {
-      console.log('get', value)
+      // 页面取值时，可以把watcher收集到dep里面---依赖收集
+      if(Dep.target) {
+        // 如果有watcher,dep就会保存watcher, 同时watcher也会保存dep
+        dep.depend()
+        if(childObj) {
+          // 属性的值依然是一个对象（object和array）
+          // childObj指代的是Observer实例，对里面的dep进行依赖收集
+          // 比如：{a:[1,2,3]}, 属性a对应的是一个数组，观测数组的返回值，就是对应数组的Observer实例
+          childObj.dep.depend()
+          if(Array.isArray(value)) {
+            // 如果内部是数组
+            // 如果数据结构类似{a:[1,2, [3, 4, [5,6]]]},这种多重嵌套，数组包含数组的情况
+            // 那我们访问a时，只是对第一层的数组做了依赖收集，里面的数组因为没有访问到，没有进行依赖收集
+            // 需要递归进行依赖收集
+            dependArray(value)
+          }
+        }
+      }
       return value
     },
     set(newValue) {
       if(value === newValue) return 
-      console.log('set', newValue)
+      // 如果赋值的新值是一个对象，需要观测
+      observe(newValue)
       value = newValue
+
+      dep.notify(); // 通知渲染watcher去更新---派发更新
     }
   })
 
@@ -71,6 +97,18 @@ export function observe(value) {
     Array.isArray(value)
   ) {
     return new Observer(value)
+  }
+}
+
+// 递归收集数组依赖
+function dependArray(value) {
+  for(let e, i = 0, len = value.length; i < len; i++) {
+    e = value[i]
+    // e.__ob__ 表示e已经响应式观测过了，但是没有进行依赖收集
+    e && e.__ob__ && e.__ob__.dep.depend()
+    if(Array.isArray(e)) {
+      dependArray(e) // 递归，数组依赖收集
+    }
   }
 }
 

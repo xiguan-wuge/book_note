@@ -8,7 +8,14 @@ export function mountComponet(vm, el) {
   // 真实的el选项赋值给实例的$el属性，为之后的虚拟dom的产生和新老虚拟dom的替换做铺垫
   vm.$el = el
   // _update 方法和_render方法都是挂载在Vue原型上，类似与_init方法
-  vm._update(vm._render())
+  // vm._update(vm._render())
+
+  // 引入watcher的概念，注册一个渲染watcher，执行vm._update(vm._render()), 渲染视图
+  let updateComponent = () => {
+    console.log('刷新页面')
+    vm._update(vm._render())
+  }
+  new Watcher(vm, updateComponent, null, true)
 }
 
 export function lifecycleMixins(Vue) {

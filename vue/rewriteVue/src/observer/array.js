@@ -42,6 +42,13 @@ methodsToPatch.forEach(method => {
     if(inserted) {
       ob.obserArray(inserted)
     }
+
+    // 数组的派发更新，
+    // ob指的就是数组对应的observe实例，
+    // 我们在get的时候，判断属性是数组还是对象， 并在observer实例上的dep中收集依赖
+    // 这里是一一对应的，可以直接更新
+    ob.dep.notify()
+
     return result
   }
 }) 

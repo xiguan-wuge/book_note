@@ -7,19 +7,30 @@
 </head>
 <body>
   <div id="app"></div>
-  <script>
+  <script type="module">
+    import Vue from './src/index.js'
     // 初始化vue项目
-    // new Vue({
-    //   el: '#app',
-    //   router,
-    //   store,
-    // //  render: (h) => h(App)
+    let vm = new Vue({
+      el: '#app',
+      data() {
+        return {
+          name: '123'
+        }
+      },
+      router,
+      store,
+    //  render: (h) => h(App)
     // render(h => {
-      // return h('div', {id: 'aaa'}, 'hello')
+    //   return h('div', {id: 'aaa'}, 'hello')
     // })
-    // template: '<div id="aaa">hello</div>'
-    //
-    // })
+      template: '<div id="aaa">hello {{name}}</div>'
+    })
+
+    setTimeout(() => {
+      vm.a = '456'
+      // 调用更新
+      vm._update(vm._render())
+    })
   </script>
 </body>
 </html>
