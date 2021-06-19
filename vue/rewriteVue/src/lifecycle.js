@@ -20,9 +20,18 @@ export function mountComponet(vm, el) {
 
 export function lifecycleMixins(Vue) {
   // 把_update挂载到Vue的原型上
+  // patch就是渲染vnode为真实dom的核心
+
   Vue.prototype._update = function(vnode) {
     const vm = this;
-    // patch就是渲染vnode为真实dom的核心
-    patch(vm.$el, vnode)
+    const prevVnode = vm._vnode // 保留上一次的vnode
+    vm._vnode = vnode
+    if(!prevVnode) {
+      // 初始渲染时，vm._vnode肯定不存在
+      vm.$el = patch(vm.$el, vnode)
+    } else {
+      // 更新，把上一次的vnode 和 这次更新的vnode进行diff
+      vm.$el = patch(vm.$el, vnode)
+    }
   }
 }
