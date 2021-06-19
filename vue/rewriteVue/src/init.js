@@ -1,13 +1,16 @@
 import {initState} from 'state'
 import {compileToFunction} from './compiler/index'
-import {mountComponent} from './lifecycle'
+import {mountComponent, callHook} from './lifecycle'
+import {mergeOptions} from './util/index'
 export function initMixins(Vue) {
   Vue.prototype._init = function(options) {
     // 这里的this代表调用_init方法的对象（Vue实例）
     const vm = this
-    vm.$options = options
+    vm.$options = mergeOptions(vm.constrcutor.options,options) // ？ vm.constructor 是什么 
+    callHook(vm, 'beforeCreate')
     //  初始化数据
     initState(vm)
+    callHook(vm, 'created')
     // 存在el属性，进行模版转换
     if(vm.$options.el) {
       vm.$mount(vm.$options.el)

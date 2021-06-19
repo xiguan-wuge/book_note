@@ -17,6 +17,9 @@
           name: '123'
         }
       },
+      created() {
+        console.log('this is inner created')
+      },
       router,
       store,
     //  render: (h) => h(App)
@@ -24,6 +27,11 @@
     //   return h('div', {id: 'aaa'}, 'hello')
     // })
       template: '<div id="aaa">hello {{name}}</div>'
+    })
+    Vue.mixin({
+      created() {
+        console.log('this is outer created')
+      }
     })
 
     // setTimeout(() => {

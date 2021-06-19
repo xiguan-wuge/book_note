@@ -10,12 +10,17 @@ export function mountComponet(vm, el) {
   // _update 方法和_render方法都是挂载在Vue原型上，类似与_init方法
   // vm._update(vm._render())
 
+  callHook(vm, "beforeMount"); //初始渲染之前
+
   // 引入watcher的概念，注册一个渲染watcher，执行vm._update(vm._render()), 渲染视图
   let updateComponent = () => {
     console.log('刷新页面')
     vm._update(vm._render())
   }
-  new Watcher(vm, updateComponent, null, true)
+  new Watcher(vm, updateComponent, ()=> {
+    callHook(vm, 'beforeUpdate')
+  }, true)
+  callHook(vm, 'mounted')
 }
 
 export function lifecycleMixins(Vue) {
@@ -32,6 +37,16 @@ export function lifecycleMixins(Vue) {
     } else {
       // 更新，把上一次的vnode 和 这次更新的vnode进行diff
       vm.$el = patch(vm.$el, vnode)
+    }
+  }
+}
+
+export function callHook(vm, hook) {
+  // 依次执行生命周期里对应的方法
+  const handlers = vm.$options[hook]
+  if(handlers) {
+    for(let i = 0; i < handlers.length; i++) {
+      handlers[i].call(vm) // 生命周期里this指向当前实例
     }
   }
 }
