@@ -4,6 +4,12 @@ export function patch(oldVnode, vnode) {
   // 关键：
   // 初次渲染时传入的是vm.$el,就是new Vue()时传入的el选项，所以是真实dom
   // 视图更新的时候，vm.$el就被替换成了更新之前的oldVnode
+
+  if(!oldVnode) {
+    // 组件的创建过程是没有el属性的
+    return createElm(vnode)
+  }
+  // 非组件的创建过程
   const isRealElement = oldVnode.nodeType
   if(isRealElement) {
     // 初次渲染的整体思路：
@@ -60,6 +66,12 @@ function createElm(vnode) {
   let {tag, data, key, children, text} = vnode
   // 判断vnode是元素节点还是文本节点，文本节点的tag为undefined
   if(typeof tag === 'string') {
+
+    if(createComponent(vnode)) {
+      // 返回真实组件渲染的真实dom
+      return vnode.componentInstance.$el
+    }
+    
     // 虚拟dom的el指向真实dom
     vnode.el = document.createElement(tag)
     // 解析虚拟dom属性
@@ -209,4 +221,19 @@ function updateChildren(parent, oldCh, newCh) {
   }
   // 统一patch方法中新增的更新逻辑，都返回el
   return el
+}
+
+// 判断是否是组件vnode
+function createComponent(vnode) {
+  let i = vnode.data
+  // 判断i中是否存在hook和init属性，再赋值为init方法
+  if((i=i.hook) && (i.init)) {
+    i(vnode)
+  }
+  // 如果组件实例化完成，存在componentInstance属性，那就证明是组件
+  if(vnode.componentInstance) {
+    return true
+  } else {
+    return false
+  }
 }
