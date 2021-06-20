@@ -1,5 +1,6 @@
 import {pushTarget, popTarget} from './dep'
 import {queueWatcher} from './scheduler'
+import {isObject} from '../util/index'
 // 全局变量id, 每次new Watcher 都会自增
 let id = 0
 
@@ -13,12 +14,26 @@ export default class Watcher {
     this.deps= []; // 存放dep的容器
     this.depsId = new Set(); // depId收集，去重
 
+    this.user = options.user // 标识用户watcher
+
     // 如果表达式是一个函数
     if(typeof exprOrFn === 'function') {
       this.getter = exprOrFn
+    } else {
+      this.getter = function() {
+        // 用户传过来的可能是一个字符串：a.a.a.a (vue 不支持a[1].a, 不提供根据数组下标做响应式)
+        const path = exprOrFn.split('.')
+        let obj = vm
+        for(let i = 0; i < path.length; i++) {
+          obj=obj[path[i]]  // vm.a.a.a.a
+        }
+        return obj
+      }
     }
-    // 实例化默认调用get方法
-    this.get()
+    // // 实例化默认调用get方法
+    // this.get()
+    // 实例化就是进行一次取值的操作
+    this.value = this.get()
   }
 
   get() {
@@ -56,6 +71,20 @@ export default class Watcher {
 
   run() {
     // 真正的触发更新
-    this.get()
+
+    const newVal = this.get() // 新值
+    const oldVal = this.value // 旧值
+    this.value = newVal // 现在的新值将成为下一次变化的旧值
+
+    if(this.user) {
+      // 如果两次的值不同，或者值是引用类型，因为引用类型的新旧值相等，指向同一块引用地址
+      if(newVal !== oldVal || isObject(newVal)) {
+        this.cb.call(this.vm, newVal, oldVal)
+      }
+    } else {
+      // 渲染watcher
+      this.cb.call(this.vm)
+    }
+
   }
 }

@@ -25,6 +25,33 @@
       created() {
         console.log('this is inner created')
       },
+      // watch 例子
+      watch: {
+        name(newVal, oldVal) {
+          console.log('watch', newVal)
+        },
+        // 其他几种写法
+        // name: {
+        //   handler(newVal, oldVal) {
+        //     console.log('object-watch', newVal)
+        //   },
+        //   deep: true
+        // },
+        // name: [
+        //   {
+        //     handler(newVal, oldVal) {
+        //       console.log('array-watch', newVal)
+        //     },
+        //     deep: true
+        //   }
+        // ],
+        // name: 'doSomething'
+      },
+      methods: {
+        doSomething() {
+          console.log('do something')
+        }
+      },  
       router,
       store,
     //  render: (h) => h(App)
