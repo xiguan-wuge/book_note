@@ -16,6 +16,9 @@ export default class Watcher {
 
     this.user = options.user // 标识用户watcher
 
+    this.lazy = options.lazy // 标识计算属性watcher
+    this.dirty = this.lazy // 表示计算属性watcher是否需要重新计算，默认true 
+
     // 如果表达式是一个函数
     if(typeof exprOrFn === 'function') {
       this.getter = exprOrFn
@@ -32,8 +35,13 @@ export default class Watcher {
     }
     // // 实例化默认调用get方法
     // this.get()
+
+    // 用户watcher改写
     // 实例化就是进行一次取值的操作
-    this.value = this.get()
+    // this.value = this.get()
+
+    // computed改写
+    this.value = this.lazy ? undefined : this.get()
   }
 
   get() {
@@ -42,10 +50,16 @@ export default class Watcher {
 
     // 如果watcher实例是渲染watcher，就相当于执行 vm._update(vm._render())
     // 这个_render方法在执行的时候会取值，从而实现依赖收集
-    this.getter()
+    // this.getter()
+
+    // 计算属性改写
+    // 计算属性在这里执行用户自定义的get函数，访问计算属性依赖项，从而把自身的计算watcher添加到依赖想dep中
+    const res = this.getter.call(this.vm)
 
     // 在调用方法之后，把当前watcher实例从全局Dep.targtet中移除
     popTarget()
+
+    return res
   }
 
   // 把dep实例添加到deps中， 
@@ -64,9 +78,15 @@ export default class Watcher {
   // 简单执行下get方法，模拟派发更新，之后涉及到计算属性就不一样了
   update() {
     // this.get()
-    // 每次watcher进行更新时，先缓存起来，之后再一起调用
-    // 异步队列机制
-    queueWatcher(this)
+
+    if(this.lazy) {
+      // 计算属性依赖项的值发生了变化，只需要把dirty值设置为true,下次访问到了再重新计算
+      this.dirty = true
+    } else {
+      // 每次watcher进行更新时，先缓存起来，之后再一起调用
+      // 异步队列机制
+      queueWatcher(this)
+    }
   }
 
   run() {
@@ -85,6 +105,19 @@ export default class Watcher {
       // 渲染watcher
       this.cb.call(this.vm)
     }
+  }
 
+  // 计算属性重新计算，并且计算完成后把dirty值设置为false
+  evaluate() {
+    this.value = this.get()
+    this.dirty = false
+  }
+
+  depend() {
+    // 计算属性watcher存储了依赖项
+    let i = this.deps.length
+    while(i--) {
+      this.deps[i].depend() // 调用依赖想dep去收集渲染watcher
+    }
   }
 }

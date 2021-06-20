@@ -22,6 +22,11 @@
           name: '123'
         }
       },
+      computed: {
+        computedName() {
+          return `张${this.name}`
+        }
+      },
       created() {
         console.log('this is inner created')
       },
