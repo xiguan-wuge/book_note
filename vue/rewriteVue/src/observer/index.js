@@ -112,3 +112,67 @@ function dependArray(value) {
   }
 }
 
+// 使对象变成响应式
+export function set(target, key, val) {
+  // 如果使数组，则直接调用vue重写的splice方法（会触发响应式更新）
+  if(Array.isArray(target) && isValidArrayIndex(key)) { 
+    target.length = Math.max(target.length, key)
+    target.splice(key, 1, val)
+    return val
+  }
+
+  // 如果是对象本身的属性，直接添加即可(该对象本身已经被响应式了)
+  if(key in target && !(key in Object.prototype)) {
+    target[key] = val
+    return val
+  }
+
+  const ob = target.__ob__ // __ob__ 用来表示某数据是否已经被响应式了
+  // 如果某对象本身不是响应式，就不需要将其定义为响应式
+  if(!ob) {
+    target[key] = val
+    return val
+  }
+  // 核心：使用定义好的响应式函数，将数据变为响应式
+  defineReactive(ob.value, key, val)
+  ob.dep.notify() // 通知视图更新 (若是同没有改变值，在前面的逻辑中就return了)
+  return val
+}
+
+// 删除响应式数据
+export function del(target, key) {
+  // 如果是数组，依旧调用splice方法
+  if(Array.isArray(target) && isValidArrayIndex(key)) {
+    target.splice(key, 1)
+    return;
+  }
+
+  const ob = target.__ob__
+  // 如果对象本身就没有这个属性，则什么也不做
+  if(!hasOwn(target, key)) {
+    return;
+  }
+  // 直接使用delete 删除这个属性
+  delete target[key]
+  // 如果对象本身不是响应式，直接返回
+  if(!ob) {
+    return;
+  }
+  ob.dep.notify() // 通知视图更新
+} 
+
+/**
+ * Check if val is a valid array index.
+ */
+// src/shared-util
+export function isValidArrayIndex (val) {
+  const n = parseFloat(String(val))
+  return n >= 0 && Math.floor(n) === n && isFinite(val)
+}
+/**
+ * Check whether an object has the property.
+ */
+const hasOwnProperty = Object.prototype.hasOwnProperty
+export function hasOwn (obj, key) {
+  return hasOwnProperty.call(obj, key)
+}

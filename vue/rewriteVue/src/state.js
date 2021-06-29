@@ -1,4 +1,4 @@
-import {observe} from './observer/index'
+import {observe, set, del} from './observer/index'
 import Watcher from './observer/watcher'
 import Dep from './observer/dep'
 
@@ -150,4 +150,6 @@ export function stateMixin(Vue) {
       cb()
     }
   }
+  Vue.proptotye.$set = set
+  Vue.proptotye.$delete = del
 }

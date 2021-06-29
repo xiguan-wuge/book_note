@@ -1,5 +1,6 @@
 import {initExtend} from './initExtend'
 import initAssetsRegisters from './assets'
+import { set, del } from '../observer'
 const ASSETS_TYPE = ['component', 'directive', 'filter']
 export function initGlobalApi(Vue) {
   Vue.options = {} // 全局的组件，指令，过滤器
@@ -10,4 +11,6 @@ export function initGlobalApi(Vue) {
 
   initExtend(Vue) // extend方法的定义
   initAssetsRegisters(Vue) //assets注册方法，包含组件，指令和过滤器
+  Vue.set = set
+  Vue.delete = del
 }
