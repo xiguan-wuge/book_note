@@ -45,4 +45,25 @@ export function initMixins(Vue) {
     // 将当前组件实例挂载到真实的el节点上面
     return mountComponent(vm, el)
   }
+  // 添加Vue.use方法
+  Vue.use = function(plugin) {
+    // 先判断该插件是否已经插入
+    const  installedPlugins = (this._installedPlugins || (this._installedPlugins = []))
+    if(installedPlugins.indexOf(plugin) > -1) {
+      return this
+    }
+    // 获取参数
+    const args = Array.prototype.slice.call(arguments, 1)
+    // ? 为什么要在头部插入this  (this即Vue, 确保函数执行时接收的第一个参数时Vue, 不需要再import Vue)
+    args.unshift(this)
+    if(typeof plugin.install === 'function') {
+      plugin.install.apply(plugin, args)
+    } else if(typeof plugin === 'function') {
+      plugin.apply(null, this)
+    }
+    // 添加到已插入数组中
+    installedPlugins.push(plugin)
+    return this // ?为什么要返回this
+    
+  }
 }
