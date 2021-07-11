@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS 图形</title>
+  <style>
+    .triangle {
+      width: 0;
+      height: 0;
+      border: 100px solid transparent;
+      border-bottom-color: red;
+    }
+    .trapezoid {
+      /* 在三角形的基础上，修改width\height的值 */
+      width: 50px;
+      height: 50px;
+      border: 100px solid transparent;
+      border-bottom-color: red;
+    }
+    .sector {
+      /* 在三角形的基础上，添加border-radius */
+      width: 0;
+      border: 100px solid transparent;
+      border-radius: 100px;
+      border-top-color: red;
+    }
+    .arrow {
+      /* 两个三角形重叠 */
+      width: 0;
+      height: 0;
+      border: 100px solid transparent;
+      border-right-color: red;
+      position: relative;
+    }
+    .arrow:after {
+      content: '';
+      border: 80px solid transparent;
+      border-right-color: #fff;
+      position: absolute;
+      top: -80px;
+      right: -101px;
+    }
+    .oval {
+      width: 200px;
+      height: 100px;
+      background:red;
+      border-radius: 100px / 50px;
+    }
+  </style>
+</head>
+<body>
+  <p>三角形</p>
+  <div class="triangle"></div>
+  <p>梯形</p>
+  <div class="trapezoid"></div>
+  <p>扇形</p>
+  <div class="sector"></div>
+  <p>箭头</p>
+  <div class="arrow"></div>
+  <p>椭圆</p>
+  <div class="oval"></div>
+</body>
+</html>
