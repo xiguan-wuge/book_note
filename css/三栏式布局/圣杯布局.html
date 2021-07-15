@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      margin: 0;
+    }
+    .header {
+      height: 40px;
+      background-color: gray;
+    }
+    .footer {
+      height: 40px;
+      background-color: lightgray;
+      
+    }
+    /* 内容的外层盒子，留出左右部分的空间 */
+    /* ？ main的总宽度小于700px时，会发生页面塌陷 */
+    .main {
+      margin-left: 200px;
+      margin-right: 300px;
+    }
+    .center {
+      height: 500px;
+      width: 100%;
+      background-color: green;
+      float: left;
+      text-align: center;
+    }
+    .left {
+      height: 500px;
+      width: 200px;
+      background-color: red;
+      float: left;
+      /* 使左中右同一行 */
+      /* margin-left 设置% 是根据父元素宽度计算的，所以当-100%时刚好移动到上一行的同样位置 */
+      margin-left: -100%;
+      /* 使左边移出main区域，定位到左边位置 */
+      position: relative;
+      left: -200px;
+    }
+    .right {
+      height: 500px;
+      width: 300px;
+      background-color: blue;
+      float: left;
+      /* 使左中右同一行 */
+      margin-left: -300px;
+      /* 使右边移出main区域，定位到右边位置 */
+      /* right 部分不需要移动到上一行的同样位置，只需要自身在上一行就行
+          所以只需要设置margin-left 为自身宽度的负值后，自动向上排
+       */
+      position: relative;
+      right: -300px;
+    }
+    .clearfix:after {
+      content: '';
+      display: block;
+      clear: both;
+    }
+    /* 圣杯布局与双飞翼布局的区别与原理 https://blog.csdn.net/qq_41024904/article/details/103673187 */
+  </style>
+</head>
+<body>
+  <div class="header"></div>
+  <div class="main clearfix">
+    <div class="center">
+      <p>中间内容自适应</p>
+    </div>
+    <div class="left"></div>
+    <div class="right"></div>
+  </div>
+  <div class="footer"></div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PositionWay</title>
+  <style>
+    .wrapper {
+      position: relative;
+      height: 500px;
+    }
+    .wrapper div {
+      height: 100%;
+    }
+    .center {
+      position: absolute;
+      top: 0;
+      left: 100px;
+      right: 100px;
+      background-color: blue;
+    }
+    .left {
+      position: absolute;
+      left: 0;
+      top: 0;
+      background-color: red;
+      width: 100px;
+    }
+    .right {
+      position: absolute;
+      right: 0;
+      top: 0;
+      background-color: green;
+      width: 100px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="center"></div>
+    <div class="left"></div>
+    <div class="right"></div>
+  </div>
+</body>
+</html>

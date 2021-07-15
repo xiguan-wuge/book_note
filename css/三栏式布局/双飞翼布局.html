@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      margin: 0;
+      /* 设置最小宽度，防止中间被过度挤压 minWidth > leftWidth + rightWidth*/
+      min-width: 500px;
+    }
+    .header {
+      height: 40px;
+      background-color: gray;
+    }
+    .footer {
+      height: 40px;
+      background-color: lightgray;
+    }
+    /* .main {
+      margin-left: 200px;
+      margin-right: 300px;
+    } */
+    .center {
+      height: 500px;
+      width: 100%;
+      background-color: green;
+      float: left;
+      text-align: center;
+
+    }
+    .left {
+      height: 500px;
+      width: 200px;
+      background-color: red;
+      float: left;
+      margin-left: -100%;
+    }
+    .right {
+      height: 500px;
+      width: 300px;
+      background-color: blue;
+      float: left;
+      margin-left: -300px;
+    }
+    .clearfix:after {
+      content: '';
+      display: block;
+      clear: both;
+    }
+    .inner {
+      /* 子元素设置左右margin，将子元素挤到中间*/
+
+      margin-left: 200px;
+      margin-right: 300px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header"></div>
+  <div class="main clearfix">
+    <div class="center">
+      <!-- 添加子元素 -->
+      <div class="inner">中间内容自适应</div>
+    </div>
+    <div class="left"></div>
+    <div class="right"></div>
+  </div>
+  <div class="footer"></div>
+</body>
+</html>
