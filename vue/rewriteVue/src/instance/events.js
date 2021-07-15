@@ -7,12 +7,12 @@ export function eventsMixin() {
     if(cbs) {
       cbs = cbs.length > 1 ? [].slice.call(vm) : cbs
       const args = [].slice.call(vm, 1) // 请求参数（类似数组的对象）转化成数组，去除参数中的第一个（事件名）
-      for(let i = 0, len = abs.length; i < len; i++) {
+      for(let i = 0, len = cbs.length; i < len; i++) {
         try {
           // 触发对应事件的回调执行
           cbs[i].apply(vm, args)
         } catch (e) {
-          console.log(`event handler for ${event}`)
+          console.log(`event handler for ${event} and callback for ${cbs[i]}, params for ${args}`)
         }
       }
       return vm
