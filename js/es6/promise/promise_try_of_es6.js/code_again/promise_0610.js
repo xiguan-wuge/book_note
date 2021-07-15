@@ -38,7 +38,7 @@ class Mypromise {
 
     // 执行传入的函数
     try {
-      handle(this._resolve.bind(this), this._rejectedQueue.bind(this))
+      handle(this._resolve.bind(this), this._reject.bind(this))
     } catch (error) {
       this._reject(error)
     }
@@ -85,14 +85,14 @@ class Mypromise {
 
   // 处理失败的函数
   // 操作内容：1. 修改状态，2. 接收错误消息，3. 执行当前失败队列的中回调
-  _rejected(err) {
+  _reject(err) {
     if(!this._status !== PENDING) return
     this._status = REJECTED
     this._value = err
     let cb
     while(cb = this._rejectedQueue.shift()) {
       cb(err)
-    }
+    } 
   }
 
   // then 方法，Promise的核心
@@ -117,6 +117,7 @@ class Mypromise {
             }
           }, rejectNext)
         } else {
+          // onFulfilled的值可能是undefined | null
           try {
             resolveNext(value)
           } catch (e) {
