@@ -2,7 +2,7 @@
 
 function object(o) {
     function F(){}
-    F.prototype = 0
+    F.prototype = o
     return new F()
 }
 // 寄生组合式继承最简单形式

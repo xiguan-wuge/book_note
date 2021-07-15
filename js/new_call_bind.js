@@ -14,7 +14,7 @@ function myCall(context) {
 }
 
 function myBind(context) {
-  if(typeof this !== 'function') {
+  if(typeof this !== 'function') { 
     throw new TypeError('not a function')
   }
   context = content || window

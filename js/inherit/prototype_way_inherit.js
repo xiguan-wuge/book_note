@@ -1,6 +1,6 @@
 // js继承-原型式继承
 
-// 思想：不借助构造函数，借助现有的一个对象，对其做前拷贝，得到一个新的对象（instance）,再对instance做想要的修改
+// 思想：不借助构造函数，借助现有的一个对象，对其做浅拷贝，得到一个新的对象（instance）,再对instance做想要的修改
 // 问题： 和原型链继承一样，引用类型的属性值称为共享属性，一处修改，会影响其他obj属性值
 // （js引用类型特性，参数是内存中的地址，指向同一块内存）
 
@@ -57,7 +57,7 @@ var animal = {
   name: 'cat',
   frends: ['pig', 'dog']
 }
-var anotherAnimal = createAnother(person)
+var anotherAnimal = createAnother(animal)
 console.log('anotherAnimal', anotherAnimal); // { sayHi: [Function] }
 anotherAnimal.sayHi() // hi
 
