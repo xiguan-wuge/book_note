@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hash Change</title>
+</head>
+<body>
+    <ul>
+      <!-- 定义路由 -->
+      <li><a href="#/home">home</a></li>
+      <li><a href="#/about">about</a></li>
+
+      <!-- 定义渲染路由的地方 -->
+      <div id="router-view"></div>
+    </ul>
+</body>
+  <script>
+    const routerView = document.querySelector('#router-view')
+    window.addEventListener('hashchange',(data) => {
+      console.log('hashchange-data', data)
+      const hash = location.hash
+      routerView.innerHTML = hash
+    })
+    window.addEventListener('DOMContentLoaded', (res) => {
+      console.log('DOMContentLoaded', res)
+      if(!location.hash) {
+        location.hash = '/'
+      } else {
+        const hash = location.hash
+        routerView.innerHTML = hahs
+      }
+    })
+  </script>
+</html>
