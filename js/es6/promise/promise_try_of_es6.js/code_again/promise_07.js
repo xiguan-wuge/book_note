@@ -2,8 +2,8 @@ const isFunction = v => typeof v === 'function'
 
 // 异步执行函数封装
 let excuteAsync
-if(promise && promise.nextTick) {
-  excuteAsync = promise.nextTick
+if(typeof process === 'object' && process.nextTick) {
+  excuteAsync = process.nextTick
 } else if(typeof setImmediate === 'function') {
   excuteAsync = setImmediate
 } else {
@@ -51,7 +51,7 @@ class MyPromise {
   // - 获取value值
   // - 依次执行成功队列的函数 
   _resolve(value) {
-    if(this.status === PENDING) return
+    if(this.status !== PENDING) return
     this.status = FULLFILLED
     
     const runFulfilled = (val)=> {
@@ -92,7 +92,7 @@ class MyPromise {
   // 修改_value值
   // 执行失败队列中的函数
   _reject(error) {
-    if(this.status === PENDING) return 
+    if(this.status !== PENDING) return 
     this.status = REJECTED
     this._value = error
     let cb
@@ -116,7 +116,7 @@ class MyPromise {
       const fulfilled = (value) => {
         if(isFunction(onFullfilled)) {
           callAsync(onFullfilled, value, res=> {
-            if(res instanceof Promsie) {
+            if(res instanceof MyPromise) {
               res.then(resolveNext, rejectNext)
             } else {
               resolveNext(res)
@@ -134,7 +134,7 @@ class MyPromise {
       const rejected = (error) => {
         if(isFunction(onRejcted)) {
           callAsync(onRejcted, error, res => {
-            if(res instanceof Promsie) {
+            if(res instanceof MyPromise) {
               res.then(resolveNext, rejectNext)
             } else {
               rejectNext(error)
@@ -207,12 +207,12 @@ class MyPromise {
   // - 依次执行时，若有一个函数执行失败,将错误信息抛出，并不会中断当前的遍历
   // - 若数组中的项是异步操作，能保证事件的执行顺序，但是会将执行结果按传入的顺序保存
   static all(list) {
-    return new Promsie((resolve, reject) => {
+    return new MyPromise((resolve, reject) => {
       const value = []
       let count = 0
-      for(const [i, v] of Object.entries(list)) {
+      for(let i in list) {
         // 若当前函数不是promise ，这包装成promise
-        this.resolve(v).then(res => {
+        MyPromise.resolve(list[i]).then(res => {
           value[i] = res
           count++
           // 当所有项状态都变成fulfilled，执行resolve
@@ -227,10 +227,10 @@ class MyPromise {
   // 静态race方法
   // 只要有一个实例的状态发生改变，新的promise 的状态就随即发生改变
   static race(list) {
-    return new Promise((resolve, reject) => {
-      for(const [i, v] of Object.entries(list)) {
+    return new MyPromise((resolve, reject) => {
+      for(const i in list) {
         // v 操作的函数，影响对应then回调的执行时间
-        this.resolve(v).then(res => {
+        MyPromise.resolve(list[i]).then(res => {
           resolve(res)
         }, err => {
           reject(err)
@@ -238,8 +238,28 @@ class MyPromise {
       }
     })
   }
-
-
 }
+
+function t1() {
+  setTimeout(()=> {
+    console.log('t1')
+  }, 1000)
+}
+function t2() {
+  setTimeout(()=> {
+    console.log('t2')
+  }, 2000)
+}
+function t3() {
+  setTimeout(()=> {
+    console.log('t3')
+  }, 3000)
+}
+console.log('1111', MyPromise.all)
+Promise.all([t1, t2, t3, 4, 5]).then(res => {
+  console.log('all-res', res)
+}).catch(err => {
+  console.log('all-err', err)
+})
 
 

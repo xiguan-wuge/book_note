@@ -228,20 +228,41 @@ class MyPromise {
 // console.log(2)
 // 依次输出：1 2 4 3 5 6 finally
 
-new Promise(resolve => {
-  console.log(1)
-  resolve(3)
-  Promise.resolve().then(() => {
-    console.log(4)
-  }).then(() => {
-    console.log(5)
-  })
-}).then(num => {
-  console.log(num)
-}).then(() => {
-  console.log(6)
-}).finally(() => {
-  console.log('finally')
-})
-console.log(2)
+// new Promise(resolve => {
+//   console.log(1)
+//   resolve(3)
+//   Promise.resolve().then(() => {
+//     console.log(4)
+//   }).then(() => {
+//     console.log(5)
+//   })
+// }).then(num => {
+//   console.log(num)
+// }).then(() => {
+//   console.log(6)
+// }).finally(() => {
+//   console.log('finally')
+// })
+// console.log(2)
 // 依次输出：1 2 4 3 5 6 finally
+function t1() {
+  setTimeout(()=> {
+    console.log('t1')
+  }, 1000)
+}
+function t2() {
+  setTimeout(()=> {
+    console.log('t2')
+  }, 2000)
+}
+function t3() {
+  setTimeout(()=> {
+    console.log('t3')
+  }, 3000)
+}
+console.log('1111', MyPromise.all)
+MyPromise.all([t1, t2, t3, 4, 5]).then(res => {
+  console.log('all-res', res)
+}).catch(err => {
+  console.log('all-err', err)
+})
