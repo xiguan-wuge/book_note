@@ -1,6 +1,6 @@
-import {observe, set, del} from './observer/index'
-import Watcher from './observer/watcher'
-import Dep from './observer/dep'
+import {observe, set, del} from './observer/index.js'
+import Watcher from './observer/watcher.js'
+import Dep from './observer/dep.js'
 
 
 // 主要关注：
@@ -57,10 +57,10 @@ const sharedPropertyDefinition = {
 function defineComputed(target, key, userDef) {
   if(typeof userDef === 'function') {
     // 若是函数，手动赋值到get
-    sharedPropertyDefine.get = createComputedGetter(key)
+    sharedPropertyDefinition.get = createComputedGetter(key)
   } else {  
-    sharedPropertyDefine.get = createComputedGetter(key)
-    sharedPropertyDefine.set = userDef
+    sharedPropertyDefinition.get = createComputedGetter(key)
+    sharedPropertyDefinition.set = userDef
   }
   Object.defineProperty(target, key, sharedPropertyDefinition)
 }
@@ -140,8 +140,8 @@ function proxy(object, sourceKey, key) {
   })
 }
 
-export function stateMixin(Vue) {
-  Vue.proptotye.$watch = function(exprOrFn, cb, options) {
+export function stateMixins(Vue) {
+  Vue.prototype.$watch = function(exprOrFn, cb, options) {
     const vm = this
     // user: true 表示这是一个用户watcher
     const watcher = new Watcher(vm, exprOrFn, cb, {...options, user: true})
@@ -150,6 +150,6 @@ export function stateMixin(Vue) {
       cb()
     }
   }
-  Vue.proptotye.$set = set
-  Vue.proptotye.$delete = del
+  Vue.prototype.$set = set
+  Vue.prototype.$delete = del
 }

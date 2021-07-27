@@ -1,5 +1,5 @@
-import {parse} from './parse'
-import {generate} from './codegen'
+import {parse} from './parse.js'
+import {generate} from './codegen.js'
 
 export function compileToFunction(template) {
   // 需要把html字符串转换成render函数

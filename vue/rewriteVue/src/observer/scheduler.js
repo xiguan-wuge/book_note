@@ -1,4 +1,4 @@
-import {nextTick} from '../util/next-tick'
+import {nextTick} from '../util/next-tick.js'
 let queue = []
 let has = {}
 function flushSchedulerQueue() {

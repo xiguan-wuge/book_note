@@ -1,12 +1,12 @@
-import {initState} from 'state'
-import {compileToFunction} from './compiler/index'
-import {mountComponent, callHook} from './lifecycle'
-import {mergeOptions} from './util/index'
+import {initState} from './state.js'
+import {compileToFunction} from './compiler/index.js'
+import {mountComponent, callHook} from './lifecycle.js'
+import {mergeOptions} from './util/index.js'
 export function initMixins(Vue) {
   Vue.prototype._init = function(options) {
     // 这里的this代表调用_init方法的对象（Vue实例）
     const vm = this
-    vm.$options = mergeOptions(vm.constrcutor.options,options) // ？ vm.constructor 是什么 
+    vm.$options = mergeOptions(vm.constructor.options, options) // ？ vm.constructor 是什么 
     callHook(vm, 'beforeCreate')
     //  初始化数据
     initState(vm)

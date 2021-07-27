@@ -3,7 +3,7 @@
 const arrayProto = Array.prototype
 // 然后将arrayMehods 继承自数组原型，
 // 这是面向切片编程思想(AOP) --- 在不破坏封装的情况下，动态的扩展功能
-export const arrayMethods = Object.create(arrayProto)
+const arrayMethods = Object.create(arrayProto)
 
 let methodsToPatch = [
   'push',
@@ -52,3 +52,6 @@ methodsToPatch.forEach(method => {
     return result
   }
 }) 
+export {
+  arrayMethods
+}

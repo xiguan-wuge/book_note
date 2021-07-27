@@ -1,6 +1,6 @@
-import {patch} from './vdom/patch'
+import {patch} from './vdom/patch.js'
 
-export function mountComponet(vm, el) {
+export function mountComponent(vm, el) {
   // 在上一步模版编译中，解析生成了render函数
   // 下一步就是执行vm._render()方法，调用生成人render方法，生成虚拟dom
   // 最后使用vm._update()方法，把虚拟dom 渲染到页面

@@ -42,7 +42,7 @@ export function mergeOptions(parent, child) {
 
   // 父亲没有，儿子有的选项
   for(let key in child) {
-    if(!parent.hasOwnProperty(key)) {
+    if(parent && !parent.hasOwnProperty(key)) {
       mergeFiled(key)
     }
   }

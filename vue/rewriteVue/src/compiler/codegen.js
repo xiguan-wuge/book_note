@@ -1,5 +1,3 @@
-import _class from "../../../../../vue/vue@2x/vueSourceCode/vue/src/platforms/web/compiler/modules/class"
-
 const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g // 匹配花括号 {{ }}, 捕获花括号里的内容
 
 function gen(node) {

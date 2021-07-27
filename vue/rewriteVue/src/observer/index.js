@@ -1,5 +1,5 @@
-import {arrayMethod} from './array'
-import Dep from './dep'
+import {arrayMethods} from './array.js'
+import Dep from './dep.js'
 
 class Observer {
   constructor(value) {
@@ -16,7 +16,7 @@ class Observer {
 
     if(Array.isArray(value)) {
       // 通过重写数组原型方法来对数组的七种方法进行拦截
-      value.__proto__ = arrayMethod
+      value.__proto__ = arrayMethods
       
       // 递归判断内部数据
       this.observeArray(value)

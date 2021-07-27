@@ -1,4 +1,4 @@
-import {isObject, isReservedTag} from '../util/index'
+import {isObject, isReservedTag} from '../util/index.js'
 // 定义Vnode类
 export default class Vnode {
   constructor(tag, data, key, children, text) {

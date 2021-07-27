@@ -11,9 +11,9 @@
     import Vue from './src/index.js'
     console.log('html vue',Vue)
     // 全局组件
-    Vue.component('parent-component', {
-      template: '<div>全局组件</div>'
-    })
+    // Vue.components('parent-component', { 
+    //   template: '<div>全局组件</div>'
+    // })
     // 初始化vue项目
     let vm = new Vue({
       el: '#app',
@@ -57,16 +57,17 @@
           console.log('do something')
         }
       },  
-      router,
-      store,
+      // router,
+      // store,
     //  render: (h) => h(App)
     // render(h => {
     //   return h('div', {id: 'aaa'}, 'hello')
     // })
+    // <parent-component/>
+// 
       // template: '<div id="aaa">hello {{name}}</div>'
       template: `<div id="a">
         hello 用户组件{{name}}
-        <parent-component/>
         <child-component/>
       </div>`,
       // 局部组件

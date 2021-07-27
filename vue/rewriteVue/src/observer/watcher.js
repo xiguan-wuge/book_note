@@ -1,6 +1,6 @@
-import {pushTarget, popTarget} from './dep'
-import {queueWatcher} from './scheduler'
-import {isObject} from '../util/index'
+import {pushTarget, popTarget} from './dep.js'
+import {queueWatcher} from './scheduler.js'
+import {isObject} from '../util/index.js'
 // 全局变量id, 每次new Watcher 都会自增
 let id = 0
 

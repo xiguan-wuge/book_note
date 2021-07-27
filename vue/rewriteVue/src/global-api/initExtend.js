@@ -1,4 +1,4 @@
-import {mergeOptions} from '../util/index'
+import {mergeOptions} from '../util/index.js'
 // Vue.extend核心思路：
 // 使用原型继承的方式返回Vue的子类
 // 利用mergeOptions 把传入组件的options 和 父类的options 合并
