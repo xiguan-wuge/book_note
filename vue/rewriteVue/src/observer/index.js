@@ -1,5 +1,6 @@
 import {arrayMethods} from './array.js'
 import Dep from './dep.js'
+import Watcher from '../../../../../vue/vue@2x/vue/src/core/observer/watcher.js'
 
 class Observer {
   constructor(value) {
@@ -176,3 +177,21 @@ const hasOwnProperty = Object.prototype.hasOwnProperty
 export function hasOwn (obj, key) {
   return hasOwnProperty.call(obj, key)
 }
+
+// 数据响应式（依赖收集的过程）：
+// 在initState时，通过defineProperty将数据变成响应式对象，其中getter部分是依赖收集
+
+// 初始化数据后，会走mount的过程，会实例化watcher，然后会调用this.get()方法，
+// ```
+//   // 存在el属性，进行模版转换
+//   if(vm.$options.el) {
+//     vm.$mount(vm.$options.el)
+//   }
+// ```
+// get中pushTarget方法会将全局的Dep.target 赋值为当前的watcher实例（）
+
+// const res = this.getter.call(this.vm) 会执行render方法，触发数据对象的getter,此时Dep.target已经有值了，就会往下进行依赖收集
+// Watcher.addDep => dep.addSub(),将当前watcher添加到当前dep中的subs中，便于后期数据修改时通知依赖更新
+// 不断赋值Dep.target,不断收集依赖
+
+// 所以在 vm._render() 过程中，会触发所有数据的 getter，这样便已经完成了一个依赖收集的过程。
