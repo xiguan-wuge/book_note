@@ -1,6 +1,5 @@
 import {arrayMethods} from './array.js'
 import Dep from './dep.js'
-import Watcher from '../../../../../vue/vue@2x/vue/src/core/observer/watcher.js'
 
 class Observer {
   constructor(value) {
