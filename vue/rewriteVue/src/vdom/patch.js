@@ -59,8 +59,21 @@ export function patch(oldVnode, vnode) {
       }
     }
   }
+  // 触发插入的钩子。执行inser钩子
+  invokeInsertHook(vnode, insertedVnodeQueue, isInitialPatch)
 }
 
+function invokeInsertHook (vnode, queue, initial) {
+  // delay insert hooks for component root nodes, invoke them after the
+  // element is really inserted
+  if (isTrue(initial) && isDef(vnode.parent)) {
+    vnode.parent.data.pendingInsert = queue
+  } else {
+    for (let i = 0; i < queue.length; ++i) {
+      queue[i].data.hook.insert(queue[i])
+    }
+  }
+}
 // 将虚拟dom转化成真实dom,就是调用原生方法生成dom树
 function createElm(vnode) {
   let {tag, data, key, children, text} = vnode
@@ -224,16 +237,35 @@ function updateChildren(parent, oldCh, newCh) {
 }
 
 // 判断是否是组件vnode
-function createComponent(vnode) {
+function createComponent(vnode, insertedVnodeQueue, parentElm, refElm) {
   let i = vnode.data
-  // 判断i中是否存在hook和init属性，再赋值为init方法
-  if((i=i.hook) && (i.init)) {
-    i(vnode)
+  if(i) {
+
+    const isReactivated = vnode.componentInstance && i.keepAlive // keepAlive 抽象组件
+    // 判断i中是否存在hook和init属性，再赋值为init方法
+    if((i=i.hook) && (i.init)) {
+      i(vnode)
+    }
+    // 如果组件实例化完成，存在componentInstance属性，那就证明是组件
+    if(vnode.componentInstance) {
+      // 初始化组件，挂在到对应的位置
+      initComponent(vnode, insertedVnodeQueue)
+      insert(parentElm, vnode.elm, refElm)
+
+      // (
+        // 如果是初始渲染keepAlive组件时，尚未给缓存的组件添加KeepAlive标识，只会走到初始化当前组件
+        // 即 需要keep-alive的组件的首次渲染
+      // )
+      if(isReactivated) {
+        // keep-alive 组件的更新渲染
+        // 。。。 省略部分代码，
+        // 如果是命中缓存的组件，将缓存的dom对象直接插入到目标元素中
+        insert(parentElm, vnode.elm, refElm)
+      }
+      // return true
+    } else {
+      return false
+    }
   }
-  // 如果组件实例化完成，存在componentInstance属性，那就证明是组件
-  if(vnode.componentInstance) {
-    return true
-  } else {
-    return false
-  }
+  
 }
