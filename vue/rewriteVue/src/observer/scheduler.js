@@ -9,7 +9,7 @@ function flushSchedulerQueue() {
   // 执行完毕之后，清空队列
   queue = []
   has = {}
-}
+} 
 
 // 实现异步队列机制
 export function queueWatcher(watcher) {

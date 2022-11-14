@@ -5,7 +5,7 @@ function Person(firstName,  lastName, age, address) {
   this.firstName = firstName
   this.lastName = lastName
   this.age = age
-  this.address = this.address
+  this.address = address
 }
 
 Person.self = function() {
