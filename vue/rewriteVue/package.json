@@ -15,10 +15,10 @@
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "babel-jest": "^26.6.3",
-    "babel-loader": "^8.2.2",
+    "babel-loader": "^8.3.0",
     "express": "^4.17.1",
     "nodejs-websocket": "^1.7.2",
-    "webpack": "^4.43.0",
+    "webpack": "^5.75.0",
     "webpack-dev-middleware": "^3.7.2",
     "webpack-hot-middleware": "^2.25.0"
   }
